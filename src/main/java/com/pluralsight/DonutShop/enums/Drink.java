@@ -1,8 +1,8 @@
 package com.pluralsight.DonutShop.enums;
 
-// [From Pizza-Licious “Drinks & Sides”] Extended to your lemonade/milkshake flavors
+// Drinks list mirrors Pizza-licious “drinks/sides” extension idea
 public enum Drink {
-    Fountain, Coffee, Tea,
-    lemondadeblueberry, lemondadeMango, lemondadeCranberry, lemondadeStrawberry,
-    milkshakeVanilla, milkshakeChocolate, milkshakeStrawberry, milkshakeOreo, milkshakeSaltedCaramel
+    FOUNTAIN, COFFEE, TEA,
+    LEMONADE_BLUEBERRY, LEMONADE_MANGO, LEMONADE_CRANBERRY, LEMONADE_STRAWBERRY,
+    MILKSHAKE_VANILLA, MILKSHAKE_CHOCOLATE, MILKSHAKE_STRAWBERRY, MILKSHAKE_OREO, MILKSHAKE_SALTED_CARAMEL
 }

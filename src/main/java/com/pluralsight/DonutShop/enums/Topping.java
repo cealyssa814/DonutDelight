@@ -1,0 +1,6 @@
+package com.pluralsight.DonutShop.enums;
+
+public enum Topping {
+    CHOCOLATE_CHIPS, BACON, PEANUTS, GRAHAM_CRACKERS,
+    OREO_PIECES, TOASTED_COCONUT, RAINBOW_SPRINKLES, CHOCOLATE_SPRINKLES
+}

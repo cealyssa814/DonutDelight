@@ -1,8 +1,9 @@
 package com.pluralsight.DonutShop.enums;
 
 public enum Drizzle {
-        Chocolate, Caramel, saltedCaramel, Marshmallow, Vanilla,
-        Lemon, Strawberry, Maple, Blueberry, PeanutButter
-    }
+    CHOCOLATE, CARAMEL, SALTED_CARAMEL, MARSHMALLOW, VANILLA,
+    LEMON, STRAWBERRY, MAPLE, BLUEBERRY, PEANUT_BUTTER
+}
+
 
 
