@@ -1,6 +1,6 @@
 package com.pluralsight.DonutShop.model;
 import com.pluralsight.DonutShop.enums.*;
-import com.pluralsight.Pricing;
+import com.pluralsight.DonutShop.userinterface.Pricing;
 
 import java.util.*;
 
@@ -14,12 +14,30 @@ public class Donut {
     private boolean extraToppings; // “extra toppings” switch from Pizza-licious rubric
 
     // Setters to make Menu wiring cleaner (inspired by SandwichShop assembly flow)
-    public Donut dough(Dough v){ this.dough=v; return this; }
-    public Donut coating(Coating v){ this.coating=v; return this; }
-    public Donut toppings(List<Topping> v){ this.toppings=v; return this; }
-    public Donut drizzles(List<Drizzle> v){ this.drizzles=v; return this; }
-    public Donut size(PackSize v){ this.size=v; return this; }
-    public Donut extra(boolean v){ this.extraToppings=v; return this; }
+    public Donut dough(Dough v){
+        this.dough=v;
+        return this;
+    }
+    public Donut coating(Coating v){
+        this.coating=v;
+        return this;
+    }
+    public Donut toppings(List<Topping> v){
+        this.toppings=v;
+        return this;
+    }
+    public Donut drizzles(List<Drizzle> v){
+        this.drizzles=v;
+        return this;
+    }
+    public Donut size(PackSize v){
+        this.size=v;
+        return this;
+    }
+    public Donut extra(boolean v){
+        this.extraToppings=v;
+        return this;
+    }
 
     // Deterministic price, like Pizza-licious’ Pizza.price()
     public double price(){
@@ -38,7 +56,9 @@ public class Donut {
                 String.format(" | $%.2f", price()); // GymLedger taught us to format monetary output consistently
     }
 
-    private static String nice(Enum<?> e){ return e.name().toLowerCase().replace('_',' '); }
+    private static String nice(Enum<?> e){
+        return e.name().toLowerCase().replace('_',' ');
+    }
     private static String list(Collection<? extends Enum<?>> e){
         return e.isEmpty() ? "(none)" : e.stream().map(Donut::nice).toList().toString();
     }

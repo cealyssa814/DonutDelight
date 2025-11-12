@@ -1,4 +1,4 @@
-package com.pluralsight.DonutShop;
+package com.pluralsight.DonutShop.util;
 import java.util.*;
 
 // I wrote this helper to centralize all console input logic.
@@ -10,32 +10,34 @@ public final class InputHelper {
     // Reusable bounded integer prompt (SandwichShop-style input loop)
     public static int choose(String prompt, int min, int max){
         while(true){
-            System.out.print(prompt); // UI line (SandwichShop)
+            ThemedPrinter.print(prompt); // UI line (SandwichShop)
             try{
                 int v = Integer.parseInt(in.nextLine().trim()); // safe parse like SandwichShop
                 if (v>=min && v<=max) return v; // guard rails
             }catch(Exception ignored){}
-            System.out.println("Please enter a number between " + min + " and " + max + "."); // friendly retry
+            ThemedPrinter.println("Please enter a number between " + min + " and " + max + "."); // friendly retry
         }
     }
 
     // Simple y/n prompt (SandwichShop pattern)
     public static boolean yesNo(String prompt){
         while(true){
-            System.out.print(prompt + " (y/n): ");
+            ThemedPrinter.print(prompt + " (y/n): ");
             String s = in.nextLine().trim().toLowerCase();
-            if (s.equals("y")) return true;
-            if (s.equals("n")) return false;
-            System.out.println("Type y or n.");
+            if (s.equals("y"))
+                return true;
+            if (s.equals("n"))
+                return false;
+            ThemedPrinter.println("Type y or n.");
         }
     }
 
     // Choose ONE enum value — a generalization of SandwichShop’s single-choice menus
     public static <E extends Enum<E>> E chooseEnum(String title, Class<E> type){
         E[] values = type.getEnumConstants();
-        System.out.println(title);
+        ThemedPrinter.println(title);
         for (int i=0;i<values.length;i++){
-            System.out.println((i+1) + ") " + nice(values[i])); // display pretty names
+            ThemedPrinter.println((i+1) + ") " + nice(values[i])); // display pretty names
         }
         int pick = choose("Choose: ", 1, values.length);
         return values[pick-1];
@@ -44,14 +46,15 @@ public final class InputHelper {
     // Choose MANY enum values — a generalization of SandwichShop’s “add ingredients” multi-select
     public static <E extends Enum<E>> List<E> chooseMany(String title, Class<E> type){
         E[] values = type.getEnumConstants();
-        System.out.println(title + " (comma separated, or 0 for none)");
+        ThemedPrinter.println(title + " (comma separated, or 0 for none)");
         for (int i=0;i<values.length;i++){
-            System.out.println((i+1) + ") " + nice(values[i]));
+            ThemedPrinter.println((i+1) + ") " + nice(values[i]));
         }
         while(true){
-            System.out.print("Your picks: ");
+            ThemedPrinter.print("Your picks: ");
             String line = new Scanner(System.in).nextLine().trim();
-            if (line.equals("0")) return new ArrayList<>();
+            if (line.equals("0"))
+                return new ArrayList<>();
             String[] parts = line.split(",");
             List<E> result = new ArrayList<>();
             boolean ok = true;
@@ -62,8 +65,9 @@ public final class InputHelper {
                     result.add(values[idx-1]);
                 }catch(Exception ex){ ok=false; break; }
             }
-            if (ok) return result;
-            System.out.println("Please use numbers from the list above (or 0).");
+            if (ok)
+                return result;
+            ThemedPrinter.println("Please use numbers from the list above (or 0).");
         }
     }
 
