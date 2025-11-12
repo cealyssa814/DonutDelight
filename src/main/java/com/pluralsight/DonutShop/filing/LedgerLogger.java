@@ -12,7 +12,7 @@ public final class LedgerLogger {
 
     public static void append(Order order) {
         File dir = new File("ledger");
-        if (!dir.exists()) dir.mkdirs();
+        if (!dir.exists()) dir.mkdirs(); //does this exist?
         File csv = new File(dir, "orders.csv");
         boolean newFile = !csv.exists();
         try (PrintWriter pw = new PrintWriter(new FileWriter(csv, true))) {

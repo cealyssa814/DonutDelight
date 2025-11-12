@@ -19,7 +19,7 @@ public final class InputHelper {
         }
     }
 
-    // Simple y/n prompt (SandwichShop pattern)
+    // y/n prompt (SandwichShop pattern)
     public static boolean yesNo(String prompt){
         while(true){
             ThemedPrinter.print(prompt + " (y/n): ");
@@ -35,7 +35,7 @@ public final class InputHelper {
     // Choose ONE enum value — a generalization of SandwichShop’s single-choice menus
     public static <E extends Enum<E>> E chooseEnum(String title, Class<E> type){
         E[] values = type.getEnumConstants();
-        ThemedPrinter.println(title);
+        ThemedPrinter.println(title); //same output as System.println, but in tan/red
         for (int i=0;i<values.length;i++){
             ThemedPrinter.println((i+1) + ") " + nice(values[i])); // display pretty names
         }
@@ -61,9 +61,14 @@ public final class InputHelper {
             for (String p : parts){
                 try{
                     int idx = Integer.parseInt(p.trim());
-                    if (idx<1||idx>values.length){ ok=false; break; }
+                    if (idx<1||idx>values.length){
+                        ok=false;
+                        break;
+                    }
                     result.add(values[idx-1]);
-                }catch(Exception ex){ ok=false; break; }
+                }catch(Exception ex){ ok=false;
+                    break;
+                }
             }
             if (ok)
                 return result;

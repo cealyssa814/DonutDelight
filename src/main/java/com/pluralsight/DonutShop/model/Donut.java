@@ -41,12 +41,22 @@ public class Donut {
 
     // Deterministic price, like Pizza-licious’ Pizza.price()
     public double price(){
+        // 1) Start with base price by pack size (3/6/9/12)
         double base = Pricing.base(size);
-        int included = 3; // first 3 toppings included
+
+        // 2) Non-premium “extra toppings” after first 3: +$0.50 each
+        int included = 3;
         int extras = Math.max(0, toppings.size() - included);
         double extraCost = extras * Pricing.extraToppingUnit();
+
+        // 3) “Extra toppings” toggle (same as Pizza-licious): +$0.50 if true
         if (extraToppings) extraCost += Pricing.extraToppingUnit();
-        return base + extraCost;
+
+        // 4) NEW: premium toppings surcharge (+$1.00 each premium topping)
+        double premium = Pricing.premiumChargeFor(toppings);
+
+        // 5) sum everything
+        return base + extraCost + premium;
     }
 
     @Override public String toString(){
@@ -57,9 +67,23 @@ public class Donut {
     }
 
     private static String nice(Enum<?> e){
+
         return e.name().toLowerCase().replace('_',' ');
     }
     private static String list(Collection<? extends Enum<?>> e){
         return e.isEmpty() ? "(none)" : e.stream().map(Donut::nice).toList().toString();
+    }
+    public String description() {
+        // Labels premium toppings with a star ★ to make it obvious in the UI/receipt.
+        String tops = (toppings==null || toppings.isEmpty()) ? "(none)" :
+                toppings.stream()
+                        .map(t -> nice(t) + (Pricing.isPremium(t) ? "★" : ""))
+                        .toList().toString();
+
+        return size.qty + "-pack "
+                + nice(dough) + " / " + nice(coating)
+                + " | tops: " + tops
+                + " | driz: " + list(drizzles)
+                + String.format(" ($%.2f)", price());
     }
 }
