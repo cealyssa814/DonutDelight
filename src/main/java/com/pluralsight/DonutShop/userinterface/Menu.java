@@ -33,19 +33,20 @@ public class Menu {
             ThemedPrinter.println("\n1) Add Donut 🍩  " +
                     "2) Add Drink 🥤  " +
                     "3) Add Snack Deal 🥤🍩  " +
-                    "4) Signature Donut 🍩" +
-                    "5) Specialty Donut 🍩🥓" +
+                    "4) Specialty Donuts 🍩🥓  " +
                     "6) Checkout 👛  " +
-                    "0) Cancel");
+                    "0) Cancel  ");
             int c = InputHelper.choose("Choose: ", 0, 6);
             switch (c) {
-                case 0 -> { System.out.println("Canceled."); return; }
+                case 0 -> {
+                    ThemedPrinter.println("Canceled.");
+                    return;
+                }
                 case 1 -> addDonut(order);
                 case 2 -> addDrink(order);
                 case 3 -> addSnackDeal(order);
-                case 4 -> addSignature(order);
-                case 5 -> addSpecialty(order);     // <-- NEW
-                case 6 -> {
+                case 4 -> addSpecialty(order);
+                case 5 -> {
                     checkout(order);
                     return;
                 }
@@ -53,20 +54,6 @@ public class Menu {
             }
         }
 
-    private void addSignature(Order order) {
-        // TODO: if you have preset "SignatureDonut" (not the $4.50 specialties), pick and add here.
-        // Example if you make a map of presets:
-        // Donut preset = SignatureDonut.mapleBaconDream(PackSize.SIX);
-        // order.addDonut(preset);
-        ThemedPrinter.println("(Signature Donuts TBD)");
-    }
-
-    private void addSnackDeal(Order order) {
-        // TODO: If you implemented a composite snack deal, create it and add.
-        // For now, you can flip a flag on the order if that’s your current model.
-        // order.setSnackDeal(true);
-        ThemedPrinter.println("(Snack Deal flow TBD)");
-    }
 
     // addDonut(): guided configuration using enums (safer than free text, follows abstraction ideas)
         private void addDonut(Order order) {
@@ -131,19 +118,31 @@ public class Menu {
 
     private void addSpecialty(Order order) {
         ThemedPrinter.println("\n— Specialty Donuts —");
-        ThemedPrinter.println("1) Maple Bacon Crunch   ($4.50)  [cake + maple icing + caramel drizzle + bacon]");
+        ThemedPrinter.println("1) Mapl1e Bacon Crunch   ($4.50)  [cake + maple icing + caramel drizzle + bacon]");
         ThemedPrinter.println("2) Cookies & Creme Dream ($4.50) [yeast + vanilla icing + oreo + chocolate drizzle]");
         int pick = InputHelper.choose("Choose: ", 1, 2);
 
         if (pick == 1) {
-            SpecialtyDonut d = SpecialtyDonut.mapleBaconCrunch(); // <-- FIXED PACKAGE/CLASS
-            order.addDonut(d);                                    // <-- use your existing addDonut(..)
+            SpecialtyDonut d = SpecialtyDonut.mapleBaconCrunch(); //
+            order.addDonut(d);
             ThemedPrinter.println("Added specialty: " + d.description());
         } else {
-            SpecialtyDonut d = SpecialtyDonut.cookiesAndCremeDream(); // <-- FIXED PACKAGE/CLASS
+            SpecialtyDonut d = SpecialtyDonut.cookiesAndCremeDream();
             order.addDonut(d);
             ThemedPrinter.println("Added specialty: " + d.description());
         }
     }
+    private void addSnackDeal(Order order) {
+        // If your Order has a boolean flag:
+        order.setSnackDeal(true);
+        // Offer drink selection for the bundle if you want:
+        if (InputHelper.yesNo("Pick a drink for the snack deal?")) {
+            Drink d = InputHelper.chooseEnum("Choose drink 🥤:", Drink.class);
+            order.setDrink(d); // or add polymorphically if you support items list
+        }
+        ThemedPrinter.println("Snack deal added.");
+    }
 }
+
+
 
