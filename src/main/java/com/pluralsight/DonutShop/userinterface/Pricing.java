@@ -1,6 +1,8 @@
 package com.pluralsight.DonutShop.userinterface;
 
-import com.pluralsight.DonutShop.enums.*;
+import com.pluralsight.DonutShop.enums.Drink;
+import com.pluralsight.DonutShop.enums.PackSize;
+import com.pluralsight.DonutShop.enums.Topping;
 
 import java.util.EnumSet;
 import java.util.List;

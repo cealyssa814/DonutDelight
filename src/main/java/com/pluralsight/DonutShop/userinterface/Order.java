@@ -3,7 +3,10 @@ package com.pluralsight.DonutShop.userinterface;
 import com.pluralsight.DonutShop.enums.Drink;
 import com.pluralsight.DonutShop.model.Donut;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 // Aggregator for line items (GymLedger accumulation patterns)
 public class Order {

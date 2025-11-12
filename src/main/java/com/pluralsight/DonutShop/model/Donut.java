@@ -1,8 +1,11 @@
 package com.pluralsight.DonutShop.model;
+
 import com.pluralsight.DonutShop.enums.*;
 import com.pluralsight.DonutShop.userinterface.Pricing;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 // Encapsulated item with state + price() behavior — classic OOP (6a).
 public class Donut {
@@ -39,31 +42,35 @@ public class Donut {
         return this;
     }
 
-    // Deterministic price, like Pizza-licious’ Pizza.price()
-    public double price(){
-        // 1) Start with base price by pack size (3/6/9/12)
-        double base = Pricing.base(size);
 
-        // 2) Non-premium “extra toppings” after first 3: +$0.50 each
+  
+    public double price() {
+        double base = Pricing.base(size);
         int included = 3;
         int extras = Math.max(0, toppings.size() - included);
         double extraCost = extras * Pricing.extraToppingUnit();
+        boolean extra = false;
+        if (extra) extraCost += Pricing.extraToppingUnit();
 
-        // 3) “Extra toppings” toggle (same as Pizza-licious): +$0.50 if true
-        if (extraToppings) extraCost += Pricing.extraToppingUnit();
-
-        // 4) NEW: premium toppings surcharge (+$1.00 each premium topping)
         double premium = Pricing.premiumChargeFor(toppings);
-
-        // 5) sum everything
         return base + extraCost + premium;
     }
 
-    @Override public String toString(){
-        return size.qty + "-Pack " + nice(dough) + " / " + nice(coating) +
-                " | toppings: " + list(toppings) +
-                " | drizzles: " + list(drizzles) +
-                String.format(" | $%.2f", price()); // GymLedger taught us to format monetary output consistently
+    @Override
+    public String toString() {
+        String tops = toppings == null || toppings.isEmpty() ? "(none)"
+                : toppings.stream()
+                .map(t -> t.name().toLowerCase().replace('_',' ') + (Pricing.isPremium(t) ? "★" : ""))
+                .toList().toString();
+        String driz = drizzles == null || drizzles.isEmpty() ? "(none)"
+                : drizzles.stream().map(d -> d.name().toLowerCase().replace('_',' ')).toList().toString();
+
+        return size.qty + "-pack "
+                + dough.name().toLowerCase().replace('_',' ') + " / "
+                + coating.name().toLowerCase().replace('_',' ')
+                + " | tops: " + tops
+                + " | driz: " + driz
+                + String.format(" ($%.2f)", price());
     }
 
     private static String nice(Enum<?> e){

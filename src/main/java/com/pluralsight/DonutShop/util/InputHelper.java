@@ -1,5 +1,8 @@
 package com.pluralsight.DonutShop.util;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 // Helper: centralizes all console input logic.
 // — Pattern comes from my SandwichShop menu flows: repeat prompts until valid.
