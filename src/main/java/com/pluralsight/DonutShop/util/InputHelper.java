@@ -1,7 +1,7 @@
 package com.pluralsight.DonutShop.util;
 import java.util.*;
 
-// I wrote this helper to centralize all console input logic.
+// Helper: centralizes all console input logic.
 // — Pattern comes from my SandwichShop menu flows: repeat prompts until valid.
 // — Also mirrors workbook advice to separate concerns (UI vs. business). (6a - Interfaces & abstraction)
 public final class InputHelper {

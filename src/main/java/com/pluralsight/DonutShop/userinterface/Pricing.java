@@ -60,7 +60,7 @@ public final class Pricing {
         return premiumCount * premiumToppingUnit();
     }
 
-    // Optional: expose whether a topping is premium (UI might show a star ★)
+    // expose whether a topping is premium (UI might show a star ★)
     public static boolean isPremium(Topping t){
         return PREMIUM_TOPPINGS.contains(t);
     }

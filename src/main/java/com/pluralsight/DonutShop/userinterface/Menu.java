@@ -11,13 +11,15 @@ import java.util.List;                    // (Collections — standard Java List
 public class Menu {
 
     // run(): main home loop — same idea as SandwichShop "Home -> New Order -> Exit"
+    //ThemedPrinter adds tan and red hue to the code
     public void run(){
         while(true){ // repeat until user chooses Exit
-            ThemedPrinter.println("\n🍩 Welcome to Donut Delight 🍩");     // banner (UI polish)
-            ThemedPrinter.println("1) Create a New Order 📝");           // option 1
-            ThemedPrinter.println("0) Exit →");                // option 0
+            ThemedPrinter.println("\n============================🍩 Welcome to Donut Delight 🍩============================");     // banner (UI polish)
+            ThemedPrinter.println("                                   1) Create a New Order 📝");           // option 1
+            ThemedPrinter.println("                                   0) Exit →");                // option 0
             int choice = InputHelper.choose("Choose: ", 0, 1); // robust input (SandwichShop pattern)
-            if (choice==0) return;                        // leave program
+            if (choice==0)
+                return;                        // leave program
             handleOrder();                                // go into order flow
         }
     }
@@ -33,11 +35,17 @@ public class Menu {
                     "0) Cancel");
             int c = InputHelper.choose("Choose: ", 0, 4); // validated menu selection
             switch (c){
-                case 0 -> { System.out.println("Order canceled. ❌"); return; } // cancel path (SandwichShop had this)
+                case 0 -> {
+                    ThemedPrinter.println("Order canceled. ❌");
+                    return;
+                } // cancel path (SandwichShop had this)
                 case 1 -> addDonut(order);           // add a configured donut
                 case 2 -> addDrink(order);           // add one drink (a la carte)
                 case 3 -> order.setSnackDeal(InputHelper.yesNo("Add snack deal now? 🥤🍩")); // bundle toggle (custom spec)
-                case 4 -> { checkout(order); return; } // finish & save
+                case 4 -> {
+                    checkout(order);
+                    return;
+                } // finish & save
             }
         }
     }
@@ -88,7 +96,7 @@ public class Menu {
         ThemedPrinter.println("\n" + order.summary());                 // Sandwich-style summary
         if (InputHelper.yesNo("Save receipt to file 🧾?")){
             try{
-                String path = ReceiptWriter.save(order);            // persist to /receipts (IO workbook) :contentReference[oaicite:12]{index=12}
+                String path = ReceiptWriter.save(order);            // persist to /receipts (IO workbook)
                 ThemedPrinter.println("Saved to: " + path);
             }catch(Exception e){
                 ThemedPrinter.println("Failed to save: " + e.getMessage());

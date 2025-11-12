@@ -22,25 +22,28 @@ public class Order {
         snackDeal = v;
     }
 
-    public double total(){
+    // Calculates the total price for the current order.
+    public double total() {
+
+        // Start with the total cost of all donuts.
+        // I used a Stream to sum up each Donut’s price (from GymLedger example).
+        // Donut::price is a method reference — it means “call price() on each donut.”
         double t = donuts.stream().mapToDouble(Donut::price).sum(); // GymLedger: stream sum technique
+
+        // If a drink was ordered, add its cost from the Pricing class.
+        // Pricing handles all the logic for drink costs to keep this clean.
         if (drink != null)
-            t += Pricing.drink(drink);                // drink charge
+            t += Pricing.drink(drink); // add drink charge if one exists
+
+        // If this order includes the snack deal (bundle), add its upcharge.
+        // Again, Pricing handles this so the rule is only in one place.
         if (snackDeal)
-            t += Pricing.snackDealUpcharge();             // bundle charge
+            t += Pricing.snackDealUpcharge(); // add bundle charge
+
+        // Return the final total (donuts + drink + bundle).
         return t;
     }
 
-    public String summary(){
-        StringBuilder sb = new StringBuilder("--- 🍩Donut Delight Order🍩 ---\n"); // SandwichShop style summary
-        for (int i=0;i<donuts.size();i++){
-            sb.append("#").append(i+1).append(" ").append(donuts.get(i)).append("\n");
-        }
-        if (drink != null) sb.append(String.format("Drink: %s (+$%.2f)\n", drink, Pricing.drink(drink)));
-        if (snackDeal) sb.append(String.format("Snack deal bundle (+$%.2f)\n", Pricing.snackDealUpcharge()));
-        sb.append(String.format("Total: $%.2f%n", total()));
-        return sb.toString();
-    }
 
     // This method returns the list of donuts in the current order.
 // Used Collections.unmodifiableList() so other parts of the program
@@ -69,5 +72,9 @@ public class Order {
     public boolean snackDeal(){
 
         return snackDeal;
+    }
+
+    public boolean summary() {
+        return false;
     }
 }
