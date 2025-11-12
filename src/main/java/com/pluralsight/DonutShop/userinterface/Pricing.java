@@ -52,7 +52,9 @@ public final class Pricing {
     );
 
     // Each premium topping adds $1.00. Keeping the number here centralizes the rule.
-    public static double premiumToppingUnit(){ return 1.00; }
+    public static double premiumToppingUnit(){
+        return 1.00;
+    }
 
     // Helper to total the premium surcharge for any donut’s toppings list.
     public static double premiumChargeFor(List<Topping> toppings){
