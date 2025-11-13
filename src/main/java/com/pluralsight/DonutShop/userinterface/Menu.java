@@ -8,6 +8,7 @@ import com.pluralsight.DonutShop.model.SpecialtyDonut;
 import com.pluralsight.DonutShop.util.InputHelper;
 import com.pluralsight.DonutShop.util.ThemedPrinter;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Menu {
@@ -28,15 +29,17 @@ public class Menu {
 
     // handleOrder(): manages a single order session (like Sandwich "build a sandwich")
     private void handleOrder(){
-        Order order = new Order(); // aggregation container (GymLedger style totals)
+        Order order = new Order(); // GymLedger style totals
         while(true){
             ThemedPrinter.println("\n1) Add Donut 🍩  " +
                     "2) Add Drink 🥤  " +
                     "3) Add Snack Deal 🥤🍩  " +
                     "4) Specialty Donuts 🍩🥓  " +
-                    "6) Checkout 👛  " +
+                    "5) Checkout 👛  " +
                     "0) Cancel  ");
-            int c = InputHelper.choose("Choose: ", 0, 6);
+            //A point I got stuck: When taking the Signature Donut Option out of the menu
+            // and forgot the change my case numbers (resulting in my checkout not working.
+            int c = InputHelper.choose("Choose: ", 0, 5);
             switch (c) {
                 case 0 -> {
                     ThemedPrinter.println("Canceled.");
@@ -53,8 +56,6 @@ public class Menu {
                 } // finish & save
             }
         }
-
-
     // addDonut(): guided configuration using enums (safer than free text, follows abstraction ideas)
         private void addDonut(Order order) {
             // Start with a tan background and red text for the donut-building section
@@ -90,31 +91,74 @@ public class Menu {
             // Add donut to order (normal logic)
             order.addDonut(d);
 
-            // Reset colors back to normal before returning (important!)
+            // Reset colors back to normal before returning
             ThemedPrinter.disable();
         }
 
     // addDrink(): single-choice flow (Pizza-licious drinks)
-        private void addDrink(Order order){
-            Drink drink = InputHelper.chooseEnum("Choose drink 🥤:", Drink.class);
-            order.setDrink(drink);
-            ThemedPrinter.println("Added drink 🥤: " + drink);
+    private void addDrink(Order order){
+        // Ask which drink
+        Drink drink = InputHelper.chooseEnum("Choose drink 🥤:", Drink.class);
+
+        // Decide which size menu to show based on drink type.
+        // Fountain gets S/M/L; Lemonades get M/L; others get single default (MEDIUM).
+        DrinkSize chosenSize;
+
+        if (drink == Drink.FOUNTAIN) {
+            // Fountain: offer all sizes (Small, Medium, Large)
+            ThemedPrinter.println("Choose size for FOUNTAIN drink:");
+            ThemedPrinter.println("1) Small   2) Medium   3) Large");
+
+            int pick = InputHelper.choose("Size: ", 1, 3);
+            chosenSize = switch (pick) {
+                case 1 -> DrinkSize.SMALL;
+                case 2 -> DrinkSize.MEDIUM;
+                case 3 -> DrinkSize.LARGE;
+                default -> DrinkSize.MEDIUM;
+            };
+            order.setDrink(drink, chosenSize); // size-aware setter
+
+        } else if (drink.name().startsWith("LEMONADE")) {
+            // Lemonades: only Medium and Large
+            ThemedPrinter.println("Choose size for LEMONADE:");
+            ThemedPrinter.println("1) Medium   2) Large");
+
+            int pick = InputHelper.choose("Size: ", 1, 2);
+            chosenSize = (pick == 2) ? DrinkSize.LARGE : DrinkSize.MEDIUM;
+            order.setDrink(drink, chosenSize);
+
+        } else {
+            // All other drinks (coffee/tea/milkshakes) keep the single default price.
+            // We still store MEDIUM so the summary prints a size consistently.
+            order.setDrink(drink, DrinkSize.MEDIUM);
         }
 
-    // checkout(): summarize, save receipt, append to ledger (GymLedger), and thank the user
-        private void checkout(Order order){
-            ThemedPrinter.println("\n" + order.summary());                 // Sandwich-style summary
-            if (InputHelper.yesNo("Save receipt to file 🧾?")){
-                try{
-                    String path = ReceiptWriter.save(order);            // persist to /receipts (IO workbook)
-                    ThemedPrinter.println("Saved to: " + path);
-                }catch(Exception e){
-                    ThemedPrinter.println("Failed to save: " + e.getMessage());
-                }
+        ThemedPrinter.println("Added drink 🥤: " + drink +
+                " (" + order.drinkSize().orElse(DrinkSize.MEDIUM) + ")");
+    }
+
+    // checkout(): summarize, save receipt, append to ledger (GymLedger), and thanks the user
+    private void checkout(Order order) {
+        // Print a summary of everything in the order.
+        // This uses Order.summary(), which formats donuts, drink, snackDeal, and total.
+        ThemedPrinter.println("\n" + order.summary());
+
+        // Ask if they want a receipt file (IO workbook behavior)
+        if (InputHelper.yesNo("Save receipt to file 🧾?")) {
+            try {
+                String path = ReceiptWriter.save(order); // writes to /receipts/...
+                ThemedPrinter.println("Saved to: " + path);
+            } catch (IOException e) {
+                ThemedPrinter.println("Failed to save: " + e.getMessage());
             }
-            LedgerLogger.append(order);                                 // record to /ledger/orders.csv (GymLedger idea)
-            ThemedPrinter.println("Thank you!");
         }
+
+        // Always append order to the ledger CSV (GymLedger style logging)
+        LedgerLogger.append(order);
+
+        // Say thanks and return to go back to main menu
+        ThemedPrinter.println("Thank you!");
+    }
 
     private void addSpecialty(Order order) {
         ThemedPrinter.println("\n— Specialty Donuts —");

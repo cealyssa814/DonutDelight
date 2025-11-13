@@ -20,7 +20,7 @@ public class SpecialtyDonut extends Donut {
     // #1: Cake donut + maple icing + caramel drizzle + bacon topping ($4.50)
     public static SpecialtyDonut mapleBaconCrunch() {
         SpecialtyDonut d = new SpecialtyDonut("Maple Bacon Crunch", 4.50);
-        // Setting parts using the fluent builder from Donut.
+        // Setting parts
         d.dough(Dough.CAKE)
                 .coating(Coating.MAPLE_ICING)
                 .toppings(List.of(Topping.BACON))

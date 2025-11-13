@@ -66,14 +66,12 @@ public final class Pricing {
     }
 //-F-I-N-A-L- -C-H-A-N-G-E-S-: Adding S/M/L and M/L to lemonade and fountain drinks
     // ==========================================
-    // Existing method kept for backward-compat:
     // if size is not supplied, we assume MEDIUM.
     // ==========================================
     public static double drink(Drink d) {
         // This preserves existing callers (Menu.addDrink, Order.total)
         return drink(d, DrinkSize.MEDIUM);
     }
-
 
 //New size-aware pricing:
 //- Fountain: S/M/L
@@ -87,7 +85,7 @@ public final class Pricing {
 
     public static double drink(Drink d, DrinkSize size) {
 
-        // Milkshakes still use a fixed premium price (previous behavior).
+        // Milkshakes still use a fixed premium price
         if (d.name().startsWith("MILKSHAKE")) {
             return 4.00;
         }

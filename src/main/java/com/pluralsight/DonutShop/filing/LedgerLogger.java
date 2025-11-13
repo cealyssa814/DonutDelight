@@ -1,5 +1,6 @@
 package com.pluralsight.DonutShop.filing;
 
+import com.pluralsight.DonutShop.enums.DrinkSize;
 import com.pluralsight.DonutShop.userinterface.Order;
 
 import java.io.File;
@@ -10,55 +11,102 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 // Append a CSV line per order — inspired by GymLedger/Transactions “running history” concept.
+//
+// LedgerLogger:
+// This class records each order in a CSV ledger file (orders.csv).
+// It's basically the "GymLedger" idea but for donuts instead of gym supplies.
+
 public final class LedgerLogger {
-    private LedgerLogger(){}
+
+    // Folder name where I keep ALL ledger files.
+    // Having a constant makes it easy to change later if I want a different structure.
+    private static final String LEDGER_FOLDER = "ledger";
+
+    // File name for the main orders CSV file.
+    private static final String LEDGER_FILE = "orders.csv";
+
+    // Utility class: I don't need to create objects of this type, so I hide the constructor.
+    private LedgerLogger() {
+
+    }
+
+//
+//     Append one Order as a single line in the ledger CSV.
+//     This gives me a history of all orders, similar to the GymLedger transaction history.
+//
     public static void append(Order order) {
-        // Create a folder named "ledger" to store my CSV file.
-        // 'File' represents a path on the computer — could be a file or folder.
-        File dir = new File("ledger");
+        // Make sure the "ledger" folder exists.
+        // This mirrors what we did in GymLedger with the data folder.
+        File dir = new File(LEDGER_FOLDER);
 
-        // Check if the folder already exists.
-        // If it doesn't, create it using mkdirs() (makes parent directories too if needed).
-        if (!dir.exists()) dir.mkdirs(); // makes sure I have somewhere to save my data
+        // If the folder does NOT exist, create it (mkdirs handles nested folders safely).
+        if (!dir.exists()) {
+            boolean created = dir.mkdirs();
+            if (created) {
+                System.out.println("Created ledger folder.");
+            }
+        }
 
-        // Create a File object for "orders.csv" inside the ledger folder.
-        File csv = new File(dir, "orders.csv");
+        // Create a File object that points to ledger/orders.csv.
+        File csv = new File(dir, LEDGER_FILE);
 
-        // Check if this is a *new* file (meaning it doesn’t exist yet).
-        // I’ll use this later to decide whether to print a CSV header line.
+        // Check if this is the very first time we're creating the file.
+        // If so, we want to write a header row with column names.
         boolean newFile = !csv.exists();
 
-        // Create a PrintWriter connected to a FileWriter in "append" mode (true).
-        // This means: if the file already exists, add to the end instead of overwriting.
-        // I’m using try-with-resources so Java automatically closes the writer when done.
+        // Open a FileWriter in APPEND mode (true) so we add lines instead of overwriting.
+        // Wrap it in a PrintWriter so we can use printf/println (easier formatting).
+        // try-with: automatically closes the writer at the end (IO workshop best practice).
         try (PrintWriter pw = new PrintWriter(new FileWriter(csv, true))) {
 
-            // If the file is new, write a header line at the top.
-            // This gives my CSV file readable column names for future reference.
-            if (newFile) pw.println("timestamp,total,items,drink,snackDeal"); // header row for first run
+            // If it's a new file, write the header line once at the top.
+            // This makes the CSV easier to read in Excel/Sheets later.
+            if (newFile) {
+                pw.println("timestamp,total,donutCount,drink,drinkSize,snackDeal");
+            }
 
-            // Create a timestamp for when the order was saved.
-            // This helps me track when each order happened.
+            // Build out each column for this order.
+
+            // (a) timestamp: when this order was logged.
+            // SimpleDateFormat is from the IO/GymLedger pattern for readable time stamps.
             String ts = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 
-            // Count how many donuts were in this order and convert it to text.
-            String items = order.donuts().size() + " donuts";
+            // (b) total: use Order.total() so all money rules stay in Order/Pricing.
+            double total = order.total();
 
-            // Get the drink name (if one was ordered) using Optional.
-            // If drink() is empty, it returns an empty string instead of crashing.
-            String drink = order.drink().map(Enum::name).orElse("");
+            // (c) donutCount: how many donuts in this order.
+            String donutCount = String.valueOf(order.donuts().size());
 
-            // Get the snack deal flag (true/false) as text.
+            // (d) drink: use Optional from Order.drink() and convert enum to name or blank.
+            String drink = order.drink()
+                    .map(Enum::name)   // if present, use the enum name (e.g., FOUNTAIN, LEMONADE_STRAWBERRY)
+                    .orElse("");       // if no drink, leave this CSV field empty
+
+            // (e) drinkSize: similar to drink, but we log size (SMALL, MEDIUM, LARGE).
+            String drinkSize = order.drinkSize()
+                    .map(DrinkSize::name) // print the enum name if present
+                    .orElse("");          // no size if no drink was set
+
+            // (f) snackDeal: true or false — convert to String so printf can print it easily.
             String snack = String.valueOf(order.snackDeal());
 
-            // Write all the order details to the CSV file in one line.
-            // %s = text, %.2f = decimal formatted to 2 places, %n = new line.
-            pw.printf("%s,%.2f,%s,%s,%s%n", ts, order.total(), items, drink, snack);
+            // Write one CSV row with all fields.
+            // %s = string, %.2f = decimal with 2 places, %n = newline (platform-independent).
+            pw.printf("%s,%.2f,%s,%s,%s,%s%n",
+                    ts,        // timestamp
+                    total,     // order total
+                    donutCount,
+                    drink,
+                    drinkSize,
+                    snack);
 
-            // If anything goes wrong (like missing permissions), ignore for now.
-            // In a real app, I’d probably log or show an error, but here it’s optional.
-        } catch (IOException ignored) {
+            // At this point, the row is written to the buffer; when the try block exits,
+            // the PrintWriter/FileWriter are automatically flushed and closed.
 
+        } catch (IOException e) {
+            // If something goes wrong writing to the file, I don't want my whole app to crash.
+            // For now, I just print an error message. In a bigger app, I'd log this somewhere.
+            System.out.println("Error writing to ledger: " + e.getMessage());
         }
     }
 }
