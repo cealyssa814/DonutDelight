@@ -140,25 +140,23 @@ public class Menu {
 
     // checkout(): summarize, save receipt, append to ledger (GymLedger), and thanks the user
     private void checkout(Order order) {
-        // Print a summary of everything in the order.
-        // This uses Order.summary(), which formats donuts, drink, snackDeal, and total.
+        // 1) Print the summary (this uses Order.summary(), which calls total() once)
         ThemedPrinter.println("\n" + order.summary());
 
-
-        // Ask if they want a receipt file (IO workbook behavior)
+        // 2) Ask to save receipt
         if (InputHelper.yesNo("Save receipt to file 🧾?")) {
             try {
-                String path = ReceiptWriter.save(order); // writes to /receipts/...
+                String path = ReceiptWriter.save(order);
                 ThemedPrinter.println("Saved to: " + path);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 ThemedPrinter.println("Failed to save: " + e.getMessage());
             }
         }
 
-        // Always append order to the ledger CSV (GymLedger style logging)
+        // 3) Log to ledger
         LedgerLogger.append(order);
 
-        // Say thanks and return to go back to main menu
+        // 4) Thank the user
         ThemedPrinter.println("Thank you!");
     }
 

@@ -34,49 +34,64 @@ public class Order {
     // Calculates the total price for the current order.
     public double total() {
 
-        // Start with the total cost of all donuts.
-        // I used a Stream to sum up each Donut’s price (from GymLedger).
-        // Donut::price is a method reference — it means “call price() on each donut.”
-        double t = donuts.stream().mapToDouble(Donut::price).sum(); // GymLedger: stream sum technique
+        // 1) Sum all donut prices (GymLedger-style stream sum)
+        double t = donuts.stream()
+                .mapToDouble(Donut::price)
+                .sum();
 
-        // If a drink was ordered, add its cost from the Pricing class.
-        // Pricing handles all the logic for drink costs to keep this clean.
+        // 2) If a drink was ordered, add its price using Pricing
         if (drinkFlavor != null) {
-            // If size is null, treat as MEDIUM to be safe.
             DrinkSize size = (drinkSize != null) ? drinkSize : DrinkSize.MEDIUM;
             t += Pricing.drink(drinkFlavor, size);
-
-            // If this order includes the snack deal (bundle), add its upcharge.
-            // Again, Pricing handles this so the rule is only in one place.
-            if (snackDeal)
-                t += Pricing.snackDealUpcharge(); // add bundle charge
-
-            // Return the final total (donuts + drink + bundle).
-            return t;
         }
-        String summary; {
-            StringBuilder sb = new StringBuilder("--- 🍩Donut Delight Order🍩 ---\n"); // SandwichShop style
 
-            for (int i = 0; i < donuts.size(); i++) {
-                sb.append("#").append(i + 1).append(" ").append(donuts.get(i)).append("\n");
-            }
-
-            // Print drink with size-aware price
-            if (drinkFlavor != null) {
-                DrinkSize size = (drinkSize != null) ? drinkSize : DrinkSize.MEDIUM;
-                sb.append(String.format("Drink: %s (%s) (+$%.2f)\n",
-                        drinkFlavor, size, Pricing.drink(drinkFlavor, size)));
-            }
-
-            if (snackDeal) {
-                sb.append(String.format("Snack deal bundle (+$%.2f)\n", Pricing.snackDealUpcharge()));
-            }
-
-            sb.append(String.format("Total: $%.2f%n", total()));
-            return Double.parseDouble(sb.toString());
+        // 3) If snack deal is enabled, add the bundle upcharge
+        if (snackDeal) {
+            t += Pricing.snackDealUpcharge();
         }
+
+        // 4) Return final numeric total, no recursion, no formatting
+        return t;
     }
 
+    // ===== SUMMARY (FORMATTING ONLY — SAFE TO CALL total() ONCE) =====
+    public String summary() {
+        StringBuilder sb = new StringBuilder("--- 🍩Donut Delight Order🍩 ---\n");
+
+        // List donuts with their own toString() formatting
+        for (int i = 0; i < donuts.size(); i++) {
+            sb.append("#")
+                    .append(i + 1)
+                    .append(" ")
+                    .append(donuts.get(i))
+                    .append("\n");
+        }
+
+        // Show drink info if there is a drink
+        if (drinkFlavor != null) {
+            DrinkSize size = (drinkSize != null) ? drinkSize : DrinkSize.MEDIUM;
+            sb.append(String.format(
+                    "Drink: %s (%s) (+$%.2f)\n",
+                    drinkFlavor,
+                    size,
+                    Pricing.drink(drinkFlavor, size)
+            ));
+        }
+
+        // Show snack deal line if applicable
+        if (snackDeal) {
+            sb.append(String.format(
+                    "Snack deal bundle (+$%.2f)\n",
+                    Pricing.snackDealUpcharge()
+            ));
+        }
+
+        // IMPORTANT: This is the ONLY place summary calls total().
+        // total() NEVER calls summary(), so there’s no infinite loop.
+        sb.append(String.format("Total: $%.2f%n", total()));
+
+        return sb.toString();
+    }
 
     // This method returns the list of donuts in the current order.
 // Used Collections.unmodifiableList() so other parts of the program
@@ -111,10 +126,6 @@ public class Order {
     public boolean snackDeal() {
 
         return snackDeal;
-    }
-
-    public boolean summary() {
-        return true;
     }
 
     public void setDrink(DrinkFlavor d) {

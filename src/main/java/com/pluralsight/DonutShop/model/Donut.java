@@ -65,12 +65,7 @@ public class Donut {
         String driz = drizzles == null || drizzles.isEmpty() ? "(none)"
                 : drizzles.stream().map(d -> d.name().toLowerCase().replace('_',' ')).toList().toString();
 
-        return size.qty + "-pack "
-                + dough.name().toLowerCase().replace('_',' ') + " / "
-                + coating.name().toLowerCase().replace('_',' ')
-                + " | tops: " + tops
-                + " | driz: " + driz
-                + String.format(" ($%.2f)", price());
+        return new StringBuilder().append(size.qty).append("-pack ").append(dough.name().toLowerCase().replace('_', ' ')).append(" / ").append(coating.name().toLowerCase().replace('_', ' ')).append(" | tops: ").append(tops).append(" | driz: ").append(driz).append(String.format(" ($%.2f)", price())).toString();
     }
 
     private static String nice(Enum<?> e){
