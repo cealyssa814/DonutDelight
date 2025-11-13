@@ -88,23 +88,24 @@ public class Menu {
             // --- Output confirmation message in color ---
             ThemedPrinter.println("Added: " + d);
 
-            // Add donut to order (normal logic)
+            // Add donut to order
             order.addDonut(d);
 
             // Reset colors back to normal before returning
+            //Alyssa this is quite necessary to the theme.
             ThemedPrinter.disable();
         }
 
     // addDrink(): single-choice flow (Pizza-licious drinks)
     private void addDrink(Order order){
         // Ask which drink
-        Drink drink = InputHelper.chooseEnum("Choose drink 🥤:", Drink.class);
+        DrinkFlavor drinkFlavor = InputHelper.chooseEnum("Choose drink 🥤:", DrinkFlavor.class);
 
         // Decide which size menu to show based on drink type.
         // Fountain gets S/M/L; Lemonades get M/L; others get single default (MEDIUM).
         DrinkSize chosenSize;
 
-        if (drink == Drink.FOUNTAIN) {
+        if (drinkFlavor == DrinkFlavor.FOUNTAIN) {
             // Fountain: offer all sizes (Small, Medium, Large)
             ThemedPrinter.println("Choose size for FOUNTAIN drink:");
             ThemedPrinter.println("1) Small   2) Medium   3) Large");
@@ -116,24 +117,24 @@ public class Menu {
                 case 3 -> DrinkSize.LARGE;
                 default -> DrinkSize.MEDIUM;
             };
-            order.setDrink(drink, chosenSize); // size-aware setter
+            order.setDrink(drinkFlavor, chosenSize); // size-aware setter
 
-        } else if (drink.name().startsWith("LEMONADE")) {
+        } else if (drinkFlavor.name().startsWith("LEMONADE")) {
             // Lemonades: only Medium and Large
             ThemedPrinter.println("Choose size for LEMONADE:");
             ThemedPrinter.println("1) Medium   2) Large");
 
             int pick = InputHelper.choose("Size: ", 1, 2);
             chosenSize = (pick == 2) ? DrinkSize.LARGE : DrinkSize.MEDIUM;
-            order.setDrink(drink, chosenSize);
+            order.setDrink(drinkFlavor, chosenSize);
 
         } else {
             // All other drinks (coffee/tea/milkshakes) keep the single default price.
             // We still store MEDIUM so the summary prints a size consistently.
-            order.setDrink(drink, DrinkSize.MEDIUM);
+            order.setDrink(drinkFlavor, DrinkSize.MEDIUM);
         }
 
-        ThemedPrinter.println("Added drink 🥤: " + drink +
+        ThemedPrinter.println("Added drink 🥤: " + drinkFlavor +
                 " (" + order.drinkSize().orElse(DrinkSize.MEDIUM) + ")");
     }
 
@@ -142,6 +143,7 @@ public class Menu {
         // Print a summary of everything in the order.
         // This uses Order.summary(), which formats donuts, drink, snackDeal, and total.
         ThemedPrinter.println("\n" + order.summary());
+
 
         // Ask if they want a receipt file (IO workbook behavior)
         if (InputHelper.yesNo("Save receipt to file 🧾?")) {
@@ -181,7 +183,7 @@ public class Menu {
         order.setSnackDeal(true);
         // Offer drink selection for the bundle if you want:
         if (InputHelper.yesNo("Pick a drink for the snack deal?")) {
-            Drink d = InputHelper.chooseEnum("Choose drink 🥤:", Drink.class);
+            DrinkFlavor d = InputHelper.chooseEnum("Choose drink 🥤:", DrinkFlavor.class);
             order.setDrink(d); // or add polymorphically if you support items list
         }
         ThemedPrinter.println("Snack deal added.");

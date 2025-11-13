@@ -1,6 +1,6 @@
 package com.pluralsight.DonutShop.userinterface;
 
-import com.pluralsight.DonutShop.enums.Drink;
+import com.pluralsight.DonutShop.enums.DrinkFlavor;
 import com.pluralsight.DonutShop.enums.DrinkSize;
 import com.pluralsight.DonutShop.model.Donut;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
 public class Order {
     private final List<Donut>
             donuts = new ArrayList<>(); // like ledger line items
-    private Drink drink;       // a la carte
+    private DrinkFlavor drinkFlavor;       // a la carte
     private DrinkSize drinkSize;
     private boolean snackDeal; // bundle toggle
 
@@ -21,8 +21,8 @@ public class Order {
         donuts.add(d);
     } // mirror SandwichShop “add to cart”
 
-    public void setDrink(Drink d, DrinkSize size) {
-        drink = d;
+    public void setDrink(DrinkFlavor d, DrinkSize size) {
+        drinkFlavor = d;
         this.drinkSize = size;
     }
 
@@ -41,10 +41,10 @@ public class Order {
 
         // If a drink was ordered, add its cost from the Pricing class.
         // Pricing handles all the logic for drink costs to keep this clean.
-        if (drink != null) {
+        if (drinkFlavor != null) {
             // If size is null, treat as MEDIUM to be safe.
             DrinkSize size = (drinkSize != null) ? drinkSize : DrinkSize.MEDIUM;
-            t += Pricing.drink(drink, size);
+            t += Pricing.drink(drinkFlavor, size);
 
             // If this order includes the snack deal (bundle), add its upcharge.
             // Again, Pricing handles this so the rule is only in one place.
@@ -62,10 +62,10 @@ public class Order {
             }
 
             // Print drink with size-aware price
-            if (drink != null) {
+            if (drinkFlavor != null) {
                 DrinkSize size = (drinkSize != null) ? drinkSize : DrinkSize.MEDIUM;
                 sb.append(String.format("Drink: %s (%s) (+$%.2f)\n",
-                        drink, size, Pricing.drink(drink, size)));
+                        drinkFlavor, size, Pricing.drink(drinkFlavor, size)));
             }
 
             if (snackDeal) {
@@ -98,9 +98,9 @@ public class Order {
     // Using Optional also makes my intent obvious —
         // there *might* be a drink, or there might not be.
         // It’s cleaner than returning null.
-    public Optional<Drink> drink() {
+    public Optional<DrinkFlavor> drink() {
 
-        return Optional.ofNullable(drink); // returns an Optional that’s empty if no drink was set
+        return Optional.ofNullable(drinkFlavor); // returns an Optional that’s empty if no drink was set
     }
 
     public Optional<DrinkSize> drinkSize() {
@@ -114,9 +114,9 @@ public class Order {
     }
 
     public boolean summary() {
-        return false;
+        return true;
     }
 
-    public void setDrink(Drink d) {
+    public void setDrink(DrinkFlavor d) {
     }
 }

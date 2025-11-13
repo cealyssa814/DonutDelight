@@ -1,6 +1,6 @@
 package com.pluralsight.DonutShop.userinterface;
 
-import com.pluralsight.DonutShop.enums.Drink;
+import com.pluralsight.DonutShop.enums.DrinkFlavor;
 import com.pluralsight.DonutShop.enums.DrinkSize;
 import com.pluralsight.DonutShop.enums.PackSize;
 import com.pluralsight.DonutShop.enums.Topping;
@@ -68,7 +68,7 @@ public final class Pricing {
     // ==========================================
     // if size is not supplied, we assume MEDIUM.
     // ==========================================
-    public static double drink(Drink d) {
+    public static double drink(DrinkFlavor d) {
         // This preserves existing callers (Menu.addDrink, Order.total)
         return drink(d, DrinkSize.MEDIUM);
     }
@@ -83,7 +83,7 @@ public final class Pricing {
 //- Advanced OOP: Overloading methods for extended behavior.
 //- Single Responsibility: All pricing (not UI) stays here.
 
-    public static double drink(Drink d, DrinkSize size) {
+    public static double drink(DrinkFlavor d, DrinkSize size) {
 
         // Milkshakes still use a fixed premium price
         if (d.name().startsWith("MILKSHAKE")) {
@@ -107,7 +107,7 @@ public final class Pricing {
         }
 
         // Fountain: S/M/L
-        if (d == Drink.FOUNTAIN) {
+        if (d == DrinkFlavor.FOUNTAIN) {
             switch (size) {
                 case SMALL:
                     return 1.75;
