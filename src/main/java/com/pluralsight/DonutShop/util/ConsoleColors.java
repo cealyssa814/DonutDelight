@@ -22,10 +22,6 @@ public final class ConsoleColors {
     }
 
 
-    // ---------------------------------------------------------
-    // 🎨 THE OFFICIAL DONUT DELIGHT THEME
-    // ---------------------------------------------------------
-
     // Light Salmon background (#FFA07A → 255, 160, 122)
     public static final String BG_SALMON = bg(255, 160, 122);
 
