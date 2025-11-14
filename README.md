@@ -144,7 +144,12 @@ A Java OOP + File IO Capstone Project
 <img width="760" height="902" alt="Screenshot 2025-11-13 at 10 57 46 PM" src="https://github.com/user-attachments/assets/a142d733-2aa0-444a-ae5d-19f4cc037aa2" />
 
 
-## A Glimpse Into my Notetaking Process
+## A Glimpse Into the beginning stages of my Notetaking Process
+
+![LTCA-33](https://github.com/user-attachments/assets/34b7ec95-26fc-475a-853b-48c0069dd297)
+
+![LTCA-34](https://github.com/user-attachments/assets/f5426db7-934f-405b-982a-68a9524ec564)
+
 
 
 ## Run Locally
@@ -166,9 +171,7 @@ Go to the project directory
 
 ## UML Diagram
 
-    
-
-
+![UML Diagram-6](https://github.com/user-attachments/assets/fddbb02c-a535-4209-8d39-b3ee2d32aa5a)
 
 
 ## Optimizations
