@@ -1,8 +1,8 @@
-package com.pluralsight.DonutShop.userinterface;
+package com.pluralsight.DonutShop.model;
 
 import com.pluralsight.DonutShop.enums.DrinkFlavor;
 import com.pluralsight.DonutShop.enums.DrinkSize;
-import com.pluralsight.DonutShop.model.Donut;
+import com.pluralsight.DonutShop.userinterface.Pricing;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,6 +54,10 @@ public class Order {
         return t;
     }
 
+
+    // ❌ This block is what caused the StackOverflowError:
+    // I tried to mix "summary string building" and "total calculation"
+    // inside the same method. total() calls total() again here.
     // ===== SUMMARY (FORMATTING ONLY — SAFE TO CALL total() ONCE) =====
     public String summary() {
         StringBuilder sb = new StringBuilder("--- 🍩Donut Delight Order🍩 ---\n");
@@ -88,17 +92,18 @@ public class Order {
 
         // IMPORTANT: This is the ONLY place summary calls total().
         // total() NEVER calls summary(), so there’s no infinite loop.
+        // ⛔ Problem: calling total() from inside total()
         sb.append(String.format("Total: $%.2f%n", total()));
-
+        // Also wrong: trying to parse the text summary as a double
         return sb.toString();
     }
 
     // This method returns the list of donuts in the current order.
-// Used Collections.unmodifiableList() so other parts of the program
-// (like the menu or checkout) can *see* what donuts were added, but they can't accidentally change the list itself.
+    // Used Collections.unmodifiableList() so other parts of the program
+    // (like the menu or checkout) can *see* what donuts were added, but they can't accidentally change the list itself.
 
     // This protects the internal data of my Order class — a good example of *encapsulation* in OOP.
-// If I just returned the raw "donuts" list, other code could modify or delete donuts directly, breaking my totals.
+    // If I just returned the raw "donuts" list, other code could modify or delete donuts directly, breaking my totals.
     public List<Donut> donuts() {
 
         return Collections.unmodifiableList(donuts); // safely exposes a read-only view of the donut list

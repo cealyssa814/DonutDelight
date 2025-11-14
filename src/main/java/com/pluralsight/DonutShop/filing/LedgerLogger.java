@@ -1,7 +1,7 @@
 package com.pluralsight.DonutShop.filing;
 
 import com.pluralsight.DonutShop.enums.DrinkSize;
-import com.pluralsight.DonutShop.userinterface.Order;
+import com.pluralsight.DonutShop.model.Order;
 
 import java.io.File;
 import java.io.FileWriter;

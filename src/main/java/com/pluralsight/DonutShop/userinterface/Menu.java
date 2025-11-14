@@ -4,11 +4,11 @@ import com.pluralsight.DonutShop.enums.*;
 import com.pluralsight.DonutShop.filing.LedgerLogger;
 import com.pluralsight.DonutShop.filing.ReceiptWriter;
 import com.pluralsight.DonutShop.model.Donut;
+import com.pluralsight.DonutShop.model.Order;
 import com.pluralsight.DonutShop.model.SpecialtyDonut;
 import com.pluralsight.DonutShop.util.InputHelper;
 import com.pluralsight.DonutShop.util.ThemedPrinter;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Menu {
@@ -20,10 +20,11 @@ public class Menu {
             ThemedPrinter.println("╔════════════════════════════════════════════════════════════╗ ");
             ThemedPrinter.println("║                     🍩 DONUT DELIGHT 🍩                    ║ ");
             ThemedPrinter.println("║              Fresh • Warm • Made With Love 💕              ║ ");
+            ThemedPrinter.println("╠════════════════════════════════════════════════════════════╣ ");
+            ThemedPrinter.println("║    ✨ 1) Build Your Dream Donut 📝                         ║ ");
+            ThemedPrinter.println("║    ✨ 0) Exit the Shop 🚪                                  ║ ");
             ThemedPrinter.println("╚════════════════════════════════════════════════════════════╝ ");
 
-            ThemedPrinter.println("   ✨ 1) Build Your Dream Donut 📝");
-            ThemedPrinter.println("   ✨ 0) Exit the Shop 🚪");
             int choice = InputHelper.choose("Choose: ", 0, 1); // robust input (SandwichShop pattern)
             if (choice==0)
                 return;                        // leave program

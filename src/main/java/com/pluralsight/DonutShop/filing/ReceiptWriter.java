@@ -2,14 +2,12 @@ package com.pluralsight.DonutShop.filing;
 
 import com.pluralsight.DonutShop.enums.DrinkSize;
 import com.pluralsight.DonutShop.model.Donut;
-import com.pluralsight.DonutShop.userinterface.Order;
+import com.pluralsight.DonutShop.model.Order;
 import com.pluralsight.DonutShop.userinterface.Pricing;
 
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 public final class ReceiptWriter {
