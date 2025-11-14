@@ -1,4 +1,7 @@
 
+<img width="1024" height="1536" alt="Donut Delight Menu" src="https://github.com/user-attachments/assets/a3240f7a-eb6f-4f1f-8c76-0e43e0593cba" />
+
+
 # 🍩 Donut Delight Ordering System
 
 A Java OOP + File IO Capstone Project
