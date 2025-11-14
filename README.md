@@ -195,3 +195,13 @@ Go to the project directory
 
 4. Enumerations
 
+## Resources
+
+1. Workbooks
+
+2. For Enums:
+
+   -W3 Schools (https://www.w3schools.com/java/java_enums.asp)
+
+   -Oracle (https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html)
+
