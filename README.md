@@ -1,5 +1,5 @@
 
-<img width="1024" height="1536" alt="Donut Delight Menu Design" src="https://github.com/user-attachments/assets/c74e9d90-db12-4419-9f23-dd05b86b06f5" />
+<img width="1024" height="1536" alt="Donut Delight Menu" src="https://github.com/user-attachments/assets/a3240f7a-eb6f-4f1f-8c76-0e43e0593cba" />
 
 
 # 🍩 Donut Delight Ordering System
