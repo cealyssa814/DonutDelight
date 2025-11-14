@@ -173,6 +173,14 @@ Go to the project directory
 
 ![UML Diagram-6](https://github.com/user-attachments/assets/fddbb02c-a535-4209-8d39-b3ee2d32aa5a)
 
+## Interesting Piece Of Code
+
+    ThemedPrinter using ConsoleColors 
+
+<img width="1710" height="1107" alt="Screenshot 2025-11-14 at 1 33 14 AM" src="https://github.com/user-attachments/assets/5c0a2ebc-9ab0-4be0-8a4e-1fd97fc45dad" />
+
+<img width="669" height="961" alt="Screenshot 2025-11-14 at 1 34 16 AM" src="https://github.com/user-attachments/assets/7505fa5d-6721-47fc-8762-5072a781c7fe" />
+
 
 ## Optimizations
 
