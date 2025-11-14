@@ -17,6 +17,7 @@ public class Menu {
     //ThemedPrinter adds tan and red hue to the code
     public void run(){
         while(true){ // repeat until user chooses Exit
+            ThemedPrinter.enable();
             ThemedPrinter.println("╔════════════════════════════════════════════════════════════╗ ");
             ThemedPrinter.println("║                     🍩 DONUT DELIGHT 🍩                    ║ ");
             ThemedPrinter.println("║              Fresh • Warm • Made With Love 💕              ║ ");
@@ -36,6 +37,7 @@ public class Menu {
     private void handleOrder(){
         Order order = new Order(); // GymLedger style totals
         while(true){
+            ThemedPrinter.enable();
             ThemedPrinter.println("");
             ThemedPrinter.println("╔══════════════════════════════════════════════════════════════════════╗ ");
             ThemedPrinter.println("║                           🧾 CURRENT ORDER 🧾                        ║ ");
